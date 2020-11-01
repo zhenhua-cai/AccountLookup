@@ -6,20 +6,20 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Callback;
 import net.stevencai.entity.Account;
 import net.stevencai.service.StringProcessUtil;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class DisplayAccountsPane extends DisplayPane {
@@ -113,6 +113,8 @@ public class DisplayAccountsPane extends DisplayPane {
         lastUpdatedTime.setPrefWidth(210);
         lastUpdatedTime.setResizable(false);
         lastUpdatedTime.setCellValueFactory(new PropertyValueFactory<Account,LocalDateTime>("lastUpdatedTime"));
+        lastUpdatedTime.setCellFactory(new LocalDateTimeFormatter<Account,LocalDateTime>());
+
 
         table.getColumns().addAll(account,username,password,email,lastUpdatedTime);
         return table;
@@ -147,5 +149,26 @@ public class DisplayAccountsPane extends DisplayPane {
     }
     public void clearAccountTables(){
         accounts.clear();
+    }
+
+    private class LocalDateTimeFormatter<S,T> implements Callback<TableColumn<S,T>, TableCell<S,T>> {
+
+        private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss");
+
+        @Override
+        public TableCell<S, T> call(TableColumn<S, T> param) {
+            return new TableCell<S,T>(){
+                @Override
+                protected void updateItem(T item, boolean empty){
+                    super.updateItem(item,empty);
+                    if(item == null || empty){
+                        setGraphic(null);
+                    }
+                    else{
+                        setGraphic(new Label(((LocalDateTime)item).format(formatter)));
+                    }
+                }
+            };
+        }
     }
 }

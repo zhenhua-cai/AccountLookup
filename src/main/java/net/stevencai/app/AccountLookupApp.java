@@ -45,7 +45,16 @@ public class AccountLookupApp extends Application {
         return scene;
     }
     private void searchAccounts(String searchContent,DisplayAccountsPane pane){
-        List<Account> accounts = accountLookupService.getAccount(searchContent);
+        searchAccounts(searchContent,pane,false);
+    }
+    private void searchAccounts(String searchContent, DisplayAccountsPane pane, boolean showAll){
+        List<Account> accounts;
+        if(!showAll) {
+            accounts = accountLookupService.getAccount(searchContent);
+        }
+        else{
+            accounts = accountLookupService.getAccounts();
+        }
         pane.clearAccountTables();
         pane.addAccountToTable(accounts);
     }
@@ -60,16 +69,21 @@ public class AccountLookupApp extends Application {
     }
     private void setRefreshButtonAction(DisplayAccountsPane pane){
         pane.setOnRefreshAction(click->{
-            System.out.println(pane.getSearchContent());
             if(pane.getSearchContent() == null || pane.getSearchContent().length() == 0){
                 return;
             }
             searchAccounts(pane.getSearchContent(),pane);
         });
     }
+    private void setShowAllButtonAction(DisplayAccountsPane pane){
+        pane.setOnShowAllAction(e->{
+            searchAccounts(null,pane,true);
+        });
+    }
     private void setButtonsAction(DisplayAccountsPane pane){
         setSearchButtionAction(pane);
         setRefreshButtonAction(pane);
+        setShowAllButtonAction(pane);
     }
     public void setMenuActions(DisplayPane pane,Scene scene){
         pane.setOnNewAccount(e->{

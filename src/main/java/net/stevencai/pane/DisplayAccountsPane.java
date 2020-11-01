@@ -29,6 +29,7 @@ public class DisplayAccountsPane extends DisplayPane {
     private Button refreshButton;
     private TableView<Account> table;
     private String searchContent;
+    private Button showAll;
 
     private ObservableList<Account> accounts= FXCollections.observableArrayList();
 
@@ -67,7 +68,12 @@ public class DisplayAccountsPane extends DisplayPane {
         refreshButton.setPadding(new Insets(10));
         HBox.setMargin(refreshButton,new Insets(10));
 
-        searchArea.getChildren().addAll(accountLabel,accountName,searchButton,refreshButton);
+        //showAll button
+        showAll = new Button("Show All");
+        showAll.setPadding(new Insets(10));
+        HBox.setMargin(showAll,new Insets(10));
+
+        searchArea.getChildren().addAll(accountLabel,accountName,searchButton,refreshButton,showAll);
 
         return searchArea;
     }
@@ -149,6 +155,10 @@ public class DisplayAccountsPane extends DisplayPane {
 
     public void setOnRefreshAction(EventHandler<? super MouseEvent> value){
         refreshButton.setOnMouseClicked(value);
+    }
+
+    public void setOnShowAllAction(EventHandler<? super MouseEvent> value){
+        showAll.setOnMouseClicked(value);
     }
 
     public String getAccountNameText(){

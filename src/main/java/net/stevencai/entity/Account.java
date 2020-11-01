@@ -1,5 +1,7 @@
 package net.stevencai.entity;
 
+import net.stevencai.security.PasswordEncoder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -64,11 +66,25 @@ public class Account implements Serializable {
     }
 
     public String getPassword() {
-        return password;
+        String key = password.substring(0, PasswordEncoder.getKeySize()/4);
+        String encryptedPw = password.substring(PasswordEncoder.getKeySize()/4);
+        try {
+            return PasswordEncoder.decryptPassword(encryptedPw, key);
+        }
+        catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try {
+            String key = PasswordEncoder.generateKey();
+
+            this.password = key+PasswordEncoder.encryptPassword(password,key);
+        }
+        catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     public LocalDateTime getLastUpdatedTime() {

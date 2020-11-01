@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class PasswordEncoder {
     private static final String AES= "AES";
+    private static final int keySize =128;
 
     private static String byteArrayToHexString(byte[] bytes){
         StringBuilder sb = new StringBuilder(bytes.length * 2);
@@ -39,7 +40,7 @@ public class PasswordEncoder {
      */
     public static String generateKey() throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(AES);
-        keyGenerator.init(128);
+        keyGenerator.init(keySize);
         SecretKey sk = keyGenerator.generateKey();
         return byteArrayToHexString(sk.getEncoded());
     }
@@ -79,4 +80,7 @@ public class PasswordEncoder {
         return new String(decryptedPassword);
     }
 
+    public static int getKeySize() {
+        return keySize;
+    }
 }

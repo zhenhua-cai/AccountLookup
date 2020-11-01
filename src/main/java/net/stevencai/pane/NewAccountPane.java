@@ -21,7 +21,7 @@ public class NewAccountPane extends DisplayPane{
     private Button addButton;
     private TextField title;
     private TextField username;
-    private PasswordField password;
+    private TextField password;
     private TextField email;
 
     public NewAccountPane(){
@@ -38,16 +38,16 @@ public class NewAccountPane extends DisplayPane{
         hBox.setAlignment(Pos.CENTER);
         VBox root = new VBox(5);
         hBox.getChildren().add(root);
-        title = createInputRow("Account Name: ",root);
-        username = createInputRow("Username: ",root);
-        password = createPasswordField("Password: ",root);
-        email = createInputRow("Email: ",root);
+        title = createField("Account Name: ",root);
+        username = createField("Username: ",root);
+        password = createField("Password: ",root,true);
+        email =createField("Email: ",root);
         addButton = addButton("Confirm", root);
         root.setPadding(new Insets(20));
         VBox.setMargin(root,new Insets(30,20,20,20));
         pane.getChildren().add(hBox);
     }
-    private PasswordField createPasswordField(String text, VBox root){
+    private TextField createField(String text, VBox root, boolean hideInputContext){
         HBox row = new HBox(10);
         Label label = new Label(text);
         label.setPrefWidth(200);
@@ -55,23 +55,13 @@ public class NewAccountPane extends DisplayPane{
         label.setPadding(new Insets(10));
         label.setTextAlignment(TextAlignment.RIGHT);
 
-        PasswordField field = new PasswordField();
-        field.setPrefWidth(300);
-        field.setPadding(new Insets(10));
-        HBox.setMargin(field,new Insets(10,0,10,0));
-        row.getChildren().addAll(label,field);
-        root.getChildren().add(row);
-        return field;
-    }
-    private TextField createInputRow(String text, VBox root){
-        HBox row = new HBox(10);
-        Label label = new Label(text);
-        label.setPrefWidth(200);
-        label.setFont(Font.font(20));
-        label.setPadding(new Insets(10));
-        label.setTextAlignment(TextAlignment.RIGHT);
-
-        TextField field = new TextField();
+        TextField field ;
+        if(!hideInputContext) {
+            field = new TextField();
+        }
+        else{
+            field = new PasswordField();
+        }
         field.setPrefWidth(300);
         field.setPadding(new Insets(10));
         HBox.setMargin(field,new Insets(10,0,10,0));
@@ -80,6 +70,9 @@ public class NewAccountPane extends DisplayPane{
         return field;
     }
 
+    private TextField createField(String text, VBox root){
+        return createField(text,root, false);
+    }
 
     private Button addButton(String text, VBox root){
         HBox row = new HBox();

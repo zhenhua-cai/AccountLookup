@@ -17,6 +17,9 @@ import java.util.List;
 
 public class AccountLookupApp extends Application {
 
+    private boolean showedAll = false;
+    private boolean validSearch = false;
+
     private static final LookupService accountLookupService;
     static{
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
@@ -55,11 +58,18 @@ public class AccountLookupApp extends Application {
         else{
             accounts = accountLookupService.getAccounts();
         }
+        if(accounts.size() == 0){
+            validSearch = false;
+        }
+        else{
+            validSearch = true;
+        }
         pane.clearAccountTables();
         pane.addAccountToTable(accounts);
     }
     private void setSearchButtionAction(DisplayAccountsPane pane){
         pane.setOnSeachAction(click->{
+            showedAll = false;
             if(pane.getAccountNameText().length() == 0){
                 pane.clearAccountTables();
                 return;
@@ -69,15 +79,22 @@ public class AccountLookupApp extends Application {
     }
     private void setRefreshButtonAction(DisplayAccountsPane pane){
         pane.setOnRefreshAction(click->{
-            if(pane.getSearchContent() == null || pane.getSearchContent().length() == 0){
+            if(showedAll){
+                searchAccounts(null,pane,true);
+            }
+            else if(!validSearch || pane.getSearchContent() == null || pane.getSearchContent().length() == 0){
                 return;
             }
-            searchAccounts(pane.getSearchContent(),pane);
+            else{
+                searchAccounts(pane.getSearchContent(),pane);
+            }
+
         });
     }
     private void setShowAllButtonAction(DisplayAccountsPane pane){
         pane.setOnShowAllAction(e->{
             searchAccounts(null,pane,true);
+            showedAll = true;
         });
     }
     private void setButtonsAction(DisplayAccountsPane pane){

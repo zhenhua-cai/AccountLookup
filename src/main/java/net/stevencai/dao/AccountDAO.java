@@ -16,4 +16,6 @@ public interface AccountDAO {
     void deleteAccount(int accountId);
 
     void deleteAccount(String accountName);
+
+    void deleteAccount(Account account);
 }

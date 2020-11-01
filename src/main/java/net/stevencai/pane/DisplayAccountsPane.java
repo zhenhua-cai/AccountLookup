@@ -111,6 +111,12 @@ public class DisplayAccountsPane extends DisplayPane {
         return column;
     }
 
+    public Account deleteSelectedRow(){
+        Account selectedItem = table.getSelectionModel().getSelectedItem();
+        table.getItems().remove(selectedItem);
+        return selectedItem;
+    }
+
     public void setOnclickAction(EventHandler<? super MouseEvent> value){
         searchButton.setOnMouseClicked(value);
     }

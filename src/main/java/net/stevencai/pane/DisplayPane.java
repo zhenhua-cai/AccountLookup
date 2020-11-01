@@ -21,12 +21,12 @@ public abstract class DisplayPane {
     public void setOnSearchAccount(EventHandler<ActionEvent> value){
         menuPane.setOnSearchAccount(value);
     }
-//    public void setOnUpdateAccount(EventHandler<ActionEvent> value){
-//        menuPane.setOnUpdateAccount(value);
-//    }
-//    public void setOnDeleteAccount(EventHandler<ActionEvent> value){
-//        menuPane.setOnDeleteAccount(value);
-//    }
+    public void setOnUpdateAccount(EventHandler<ActionEvent> value){
+        menuPane.setOnUpdateAccount(value);
+    }
+    public void setOnDeleteAccount(EventHandler<ActionEvent> value){
+        menuPane.setOnDeleteAccount(value);
+    }
     public abstract Pane createPane();
 
 }

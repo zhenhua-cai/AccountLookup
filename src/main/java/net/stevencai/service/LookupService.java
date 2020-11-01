@@ -10,4 +10,6 @@ public interface LookupService {
     void deleteAccount(int accountId);
     void deleteAccount(String accountName);
     List<Account> getAccounts();
+
+    void deleteAccount(Account account);
 }

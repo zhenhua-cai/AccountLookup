@@ -62,4 +62,10 @@ public class AccountDAOImpl implements AccountDAO{
         query.setParameter("accountName",accountName);
         query.executeUpdate();
     }
+
+    @Override
+    public void deleteAccount(Account account) {
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(account);
+    }
 }

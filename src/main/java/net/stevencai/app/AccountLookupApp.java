@@ -81,6 +81,22 @@ public class AccountLookupApp extends Application {
             setSearchButtionAction(displayAccountsPane);
             setMenuActions(displayAccountsPane,scene);
         });
+        pane.setOnDeleteAccount(e->{
+            if(pane instanceof DisplayAccountsPane){
+                Account account = ((DisplayAccountsPane)pane).deleteSelectedRow();
+                if(account == null){
+                    return;
+                }
+                try {
+                    accountLookupService.deleteAccount(account);
+                    showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully deleted account!");
+                }
+                catch(Exception ex){
+                    showMessageBox(Alert.AlertType.ERROR,"Error!",
+                            "Sorry! Failed to delete account!",ex.getMessage());
+                }
+            }
+        });
     }
     private void showMessageBox(Alert.AlertType type, String title, String header, String message){
         Alert alert= new Alert(type);

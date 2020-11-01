@@ -55,4 +55,10 @@ public class AccountLookupService implements LookupService {
     public List<Account> getAccounts() {
         return accountDAO.getAccounts();
     }
+
+    @Transactional
+    @Override
+    public void deleteAccount(Account account) {
+        accountDAO.deleteAccount(account);
+    }
 }

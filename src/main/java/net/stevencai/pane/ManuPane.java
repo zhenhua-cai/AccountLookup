@@ -35,11 +35,11 @@ public class ManuPane {
         MenuItem searchAccount = new MenuItem("Search Account");
         menu.getItems().add(searchAccount);
 
-//        MenuItem updateAccount = new MenuItem("Update Account");
-//        menu.getItems().add(updateAccount);
-//
-//        MenuItem deleteAccount = new MenuItem("Delete Account");
-//        menu.getItems().add(deleteAccount);
+        MenuItem updateAccount = new MenuItem("Update Account");
+        menu.getItems().add(updateAccount);
+
+        MenuItem deleteAccount = new MenuItem("Delete Account");
+        menu.getItems().add(deleteAccount);
     }
 
     public MenuBar getMenuBar(){
@@ -52,11 +52,12 @@ public class ManuPane {
     public void setOnSearchAccount(EventHandler<ActionEvent> value){
         menuBar.getMenus().get(0).getItems().get(1).setOnAction(value);
     }
-//    public void setOnUpdateAccount(EventHandler<ActionEvent> value){
-//        menuBar.getMenus().get(0).getItems().get(2).setOnAction(value);
-//    }    public void setOnDeleteAccount(EventHandler<ActionEvent> value){
-//        menuBar.getMenus().get(0).getItems().get(3).setOnAction(value);
-//    }
+    public void setOnUpdateAccount(EventHandler<ActionEvent> value){
+        menuBar.getMenus().get(0).getItems().get(2).setOnAction(value);
+    }
+    public void setOnDeleteAccount(EventHandler<ActionEvent> value){
+        menuBar.getMenus().get(0).getItems().get(3).setOnAction(value);
+    }
 
     public VBox getPrimaryPane() {
         return primaryPane;

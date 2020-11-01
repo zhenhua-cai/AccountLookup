@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -20,7 +21,7 @@ public class NewAccountPane extends DisplayPane{
     private Button addButton;
     private TextField title;
     private TextField username;
-    private TextField password;
+    private PasswordField password;
     private TextField email;
 
     public NewAccountPane(){
@@ -37,16 +38,32 @@ public class NewAccountPane extends DisplayPane{
         hBox.setAlignment(Pos.CENTER);
         VBox root = new VBox(5);
         hBox.getChildren().add(root);
-        title = createField("Account Name: ",root);
-        username = createField("Username: ",root);
-        password = createField("Password: ",root);
-        email =createField("Email: ",root);
+        title = createInputRow("Account Name: ",root);
+        username = createInputRow("Username: ",root);
+        password = createPasswordField("Password: ",root);
+        email = createInputRow("Email: ",root);
         addButton = addButton("Confirm", root);
         root.setPadding(new Insets(20));
         VBox.setMargin(root,new Insets(30,20,20,20));
         pane.getChildren().add(hBox);
     }
-    private TextField createField(String text, VBox root){
+    private PasswordField createPasswordField(String text, VBox root){
+        HBox row = new HBox(10);
+        Label label = new Label(text);
+        label.setPrefWidth(200);
+        label.setFont(Font.font(20));
+        label.setPadding(new Insets(10));
+        label.setTextAlignment(TextAlignment.RIGHT);
+
+        PasswordField field = new PasswordField();
+        field.setPrefWidth(300);
+        field.setPadding(new Insets(10));
+        HBox.setMargin(field,new Insets(10,0,10,0));
+        row.getChildren().addAll(label,field);
+        root.getChildren().add(row);
+        return field;
+    }
+    private TextField createInputRow(String text, VBox root){
         HBox row = new HBox(10);
         Label label = new Label(text);
         label.setPrefWidth(200);
@@ -62,6 +79,7 @@ public class NewAccountPane extends DisplayPane{
         root.getChildren().add(row);
         return field;
     }
+
 
     private Button addButton(String text, VBox root){
         HBox row = new HBox();

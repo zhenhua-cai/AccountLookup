@@ -12,7 +12,6 @@ import net.stevencai.service.LookupService;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -41,16 +40,36 @@ public class AccountLookupApp extends Application {
         DisplayAccountsPane pane = new DisplayAccountsPane();
 
         Scene scene = new Scene(pane.createPane());
-        setSearchButtionAction(pane);
+        setButtonsAction(pane);
         setMenuActions(pane,scene);
         return scene;
     }
+    private void searchAccounts(String searchContent,DisplayAccountsPane pane){
+        List<Account> accounts = accountLookupService.getAccount(searchContent);
+        pane.clearAccountTables();
+        pane.addAccountToTable(accounts);
+    }
     private void setSearchButtionAction(DisplayAccountsPane pane){
-        pane.setOnclickAction(click->{
-            List<Account> accounts = accountLookupService.getAccount(pane.getAccountNameText());
-            pane.clearAccountTables();
-            pane.addAccountToTable(accounts);
+        pane.setOnSeachAction(click->{
+            if(pane.getAccountNameText().length() == 0){
+                pane.clearAccountTables();
+                return;
+            }
+            searchAccounts(pane.getAccountNameText(),pane);
         });
+    }
+    private void setRefreshButtonAction(DisplayAccountsPane pane){
+        pane.setOnRefreshAction(click->{
+            System.out.println(pane.getSearchContent());
+            if(pane.getSearchContent() == null || pane.getSearchContent().length() == 0){
+                return;
+            }
+            searchAccounts(pane.getSearchContent(),pane);
+        });
+    }
+    private void setButtonsAction(DisplayAccountsPane pane){
+        setSearchButtionAction(pane);
+        setRefreshButtonAction(pane);
     }
     public void setMenuActions(DisplayPane pane,Scene scene){
         pane.setOnNewAccount(e->{
@@ -63,7 +82,7 @@ public class AccountLookupApp extends Application {
                     accountLookupService.saveAccount(account);
                     DisplayAccountsPane displayPane = new DisplayAccountsPane();
                     scene.setRoot(displayPane.createPane());
-                    setSearchButtionAction(displayPane);
+                    setButtonsAction(displayPane);
                     setMenuActions(displayPane, scene);
                     showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully added/updated account!");
                 }
@@ -79,9 +98,10 @@ public class AccountLookupApp extends Application {
         pane.setOnSearchAccount(e->{
             DisplayAccountsPane displayAccountsPane = new DisplayAccountsPane();
             scene.setRoot(displayAccountsPane.createPane());
-            setSearchButtionAction(displayAccountsPane);
+            setButtonsAction(displayAccountsPane);
             setMenuActions(displayAccountsPane,scene);
         });
+
         pane.setOnDeleteAccount(e->{
             if(pane instanceof DisplayAccountsPane){
                 Account account = ((DisplayAccountsPane)pane).deleteSelectedRow();

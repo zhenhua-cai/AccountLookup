@@ -26,7 +26,9 @@ public class DisplayAccountsPane extends DisplayPane {
 
     private TextField accountName;
     private Button searchButton;
+    private Button refreshButton;
     private TableView<Account> table;
+    private String searchContent;
 
     private ObservableList<Account> accounts= FXCollections.observableArrayList();
 
@@ -60,7 +62,12 @@ public class DisplayAccountsPane extends DisplayPane {
         searchButton.setPadding(new Insets(10));
         HBox.setMargin(searchButton,new Insets(10));
 
-        searchArea.getChildren().addAll(accountLabel,accountName,searchButton);
+        //refresh button
+        refreshButton = new Button("Refresh");
+        refreshButton.setPadding(new Insets(10));
+        HBox.setMargin(refreshButton,new Insets(10));
+
+        searchArea.getChildren().addAll(accountLabel,accountName,searchButton,refreshButton);
 
         return searchArea;
     }
@@ -92,21 +99,21 @@ public class DisplayAccountsPane extends DisplayPane {
         username.setCellValueFactory(new PropertyValueFactory<Account,String>("Username"));
         username.setCellFactory(TextFieldTableCell.forTableColumn());
         username.setOnEditCommit(e->{
-            ((Account)table.getItems().get(e.getTablePosition().getRow())).setUsername(e.getNewValue());
+            table.getItems().get(e.getTablePosition().getRow()).setUsername(e.getNewValue());
         });
 
         TableColumn<Account,String> password = createTableColumn("Password");
         password.setCellValueFactory(new PropertyValueFactory<Account,String>("Password"));
         password.setCellFactory(TextFieldTableCell.forTableColumn());
         password.setOnEditCommit(e->{
-            ((Account)table.getItems().get(e.getTablePosition().getRow())).setPassword(e.getNewValue());
+            table.getItems().get(e.getTablePosition().getRow()).setPassword(e.getNewValue());
         });
 
         TableColumn<Account,String> email = createTableColumn("Email");
         email.setCellValueFactory(new PropertyValueFactory<Account,String>("Email"));
         email.setCellFactory(TextFieldTableCell.forTableColumn());
         email.setOnEditCommit(e->{
-            ((Account)table.getItems().get(e.getTablePosition().getRow())).setEmail(e.getNewValue());
+            table.getItems().get(e.getTablePosition().getRow()).setEmail(e.getNewValue());
         });
 
         TableColumn<Account, LocalDateTime> lastUpdatedTime = new TableColumn<>("Last Updated Time");
@@ -114,7 +121,6 @@ public class DisplayAccountsPane extends DisplayPane {
         lastUpdatedTime.setResizable(false);
         lastUpdatedTime.setCellValueFactory(new PropertyValueFactory<Account,LocalDateTime>("lastUpdatedTime"));
         lastUpdatedTime.setCellFactory(new LocalDateTimeFormatter<Account,LocalDateTime>());
-
 
         table.getColumns().addAll(account,username,password,email,lastUpdatedTime);
         return table;
@@ -132,14 +138,25 @@ public class DisplayAccountsPane extends DisplayPane {
         table.getItems().remove(selectedItem);
         return selectedItem;
     }
+
     public Account updateSelectedRow(){
         return table.getSelectionModel().getSelectedItem();
     }
-    public void setOnclickAction(EventHandler<? super MouseEvent> value){
+
+    public void setOnSeachAction(EventHandler<? super MouseEvent> value){
         searchButton.setOnMouseClicked(value);
     }
+
+    public void setOnRefreshAction(EventHandler<? super MouseEvent> value){
+        refreshButton.setOnMouseClicked(value);
+    }
+
     public String getAccountNameText(){
-        return StringProcessUtil.processInputFieldString(accountName.getText());
+        searchContent = StringProcessUtil.processInputFieldString(accountName.getText());
+        return searchContent;
+    }
+    public String getSearchContent(){
+        return searchContent;
     }
     public void addAccountToTable(Account account){
         accounts.add(account);

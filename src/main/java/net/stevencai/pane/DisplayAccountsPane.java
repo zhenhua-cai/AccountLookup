@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -81,6 +82,7 @@ public class DisplayAccountsPane extends DisplayPane {
 
     private TableView<Account> creatResultArea(){
         table = new TableView<>();
+        table.setEditable(true);
         table.setItems(accounts);
 
         TableColumn<Account,String> account= createTableColumn("Account Name");
@@ -88,12 +90,24 @@ public class DisplayAccountsPane extends DisplayPane {
 
         TableColumn<Account,String> username = createTableColumn("Username");
         username.setCellValueFactory(new PropertyValueFactory<Account,String>("Username"));
+        username.setCellFactory(TextFieldTableCell.forTableColumn());
+        username.setOnEditCommit(e->{
+            ((Account)table.getItems().get(e.getTablePosition().getRow())).setUsername(e.getNewValue());
+        });
 
         TableColumn<Account,String> password = createTableColumn("Password");
         password.setCellValueFactory(new PropertyValueFactory<Account,String>("Password"));
+        password.setCellFactory(TextFieldTableCell.forTableColumn());
+        password.setOnEditCommit(e->{
+            ((Account)table.getItems().get(e.getTablePosition().getRow())).setPassword(e.getNewValue());
+        });
 
         TableColumn<Account,String> email = createTableColumn("Email");
         email.setCellValueFactory(new PropertyValueFactory<Account,String>("Email"));
+        email.setCellFactory(TextFieldTableCell.forTableColumn());
+        email.setOnEditCommit(e->{
+            ((Account)table.getItems().get(e.getTablePosition().getRow())).setEmail(e.getNewValue());
+        });
 
         TableColumn<Account, LocalDateTime> lastUpdatedTime = new TableColumn<>("Last Updated Time");
         lastUpdatedTime.setPrefWidth(210);
@@ -116,7 +130,9 @@ public class DisplayAccountsPane extends DisplayPane {
         table.getItems().remove(selectedItem);
         return selectedItem;
     }
-
+    public Account updateSelectedRow(){
+        return table.getSelectionModel().getSelectedItem();
+    }
     public void setOnclickAction(EventHandler<? super MouseEvent> value){
         searchButton.setOnMouseClicked(value);
     }

@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -30,6 +31,7 @@ public class AccountDAOImpl implements AccountDAO{
     @Override
     public void saveAccount(Account account) {
         Session session = sessionFactory.getCurrentSession();
+        account.setLastUpdatedTime(LocalDateTime.now());
         session.saveOrUpdate(account);
     }
 
@@ -42,8 +44,8 @@ public class AccountDAOImpl implements AccountDAO{
     @Override
     public List<Account> getAccount(String title) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Account> query = session.createQuery("from Account a where a.title=:title",Account.class);
-        query.setParameter("title",title);
+        Query<Account> query = session.createQuery("from Account a where a.title like :title",Account.class);
+        query.setParameter("title","%"+title+"%");
         return query.getResultList();
     }
 

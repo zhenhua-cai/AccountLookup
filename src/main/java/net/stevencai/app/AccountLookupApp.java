@@ -12,6 +12,7 @@ import net.stevencai.service.LookupService;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -94,6 +95,20 @@ public class AccountLookupApp extends Application {
                 catch(Exception ex){
                     showMessageBox(Alert.AlertType.ERROR,"Error!",
                             "Sorry! Failed to delete account!",ex.getMessage());
+                }
+            }
+        });
+
+        pane.setOnUpdateAccount(e->{
+            if(pane instanceof DisplayAccountsPane){
+                Account account = ((DisplayAccountsPane)pane).updateSelectedRow();
+                try {
+                    accountLookupService.saveAccount(account);
+                    showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully updated account!");
+                }
+                catch(Exception ex){
+                    showMessageBox(Alert.AlertType.ERROR,"Error!",
+                            "Sorry! Failed to update account!",ex.getMessage());
                 }
             }
         });

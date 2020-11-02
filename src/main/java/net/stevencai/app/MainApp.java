@@ -7,14 +7,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author steven cai
- * @version V1.0
+ * @version V1.1
  */
 public class MainApp
 {
 
     public static void main( String[] args )
     {
-
         AccountLookupApp.run();
     }
 }

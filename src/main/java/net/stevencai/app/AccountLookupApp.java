@@ -245,6 +245,7 @@ public class AccountLookupApp extends Application {
         pane.setOnUpdateAccount(e->{
             if(pane instanceof DisplayAccountsPane){
                 Account account = ((DisplayAccountsPane)pane).updateSelectedRow();
+                if(account == null){return;}
                 try {
                     accountLookupService.saveAccount(account);
                     showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully updated account!");

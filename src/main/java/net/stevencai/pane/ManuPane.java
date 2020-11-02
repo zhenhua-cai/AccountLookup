@@ -44,6 +44,10 @@ public class ManuPane {
         //delete account
         MenuItem deleteAccount = new MenuItem("Delete Account");
         menu.getItems().add(deleteAccount);
+
+        //Logout
+        MenuItem logout = new MenuItem("Logout");
+        menu.getItems().add(logout);
     }
 
     public MenuBar getMenuBar(){
@@ -62,7 +66,9 @@ public class ManuPane {
     public void setOnDeleteAccount(EventHandler<ActionEvent> value){
         menuBar.getMenus().get(0).getItems().get(3).setOnAction(value);
     }
-
+    public void setOnLogoutUser(EventHandler<ActionEvent> value){
+        menuBar.getMenus().get(0).getItems().get(4).setOnAction(value);
+    }
     public VBox getPrimaryPane() {
         return primaryPane;
     }

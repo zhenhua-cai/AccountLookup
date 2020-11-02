@@ -303,6 +303,12 @@ public class AccountLookupApp extends Application {
                 }
             }
         });
+
+        //set action on logout user.
+        pane.setOnLogoutUser(e->{
+            switchToLoginPanel(scene);
+            this.user = null;
+        });
     }
 
     /**

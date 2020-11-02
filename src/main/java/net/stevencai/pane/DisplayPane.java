@@ -27,6 +27,9 @@ public abstract class DisplayPane {
     public void setOnDeleteAccount(EventHandler<ActionEvent> value){
         menuPane.setOnDeleteAccount(value);
     }
+    public void setOnLogoutUser(EventHandler<ActionEvent> value){
+        menuPane.setOnLogoutUser(value);
+    }
     public abstract Pane createPane();
 
 }

@@ -209,6 +209,11 @@ public class DisplayAccountsPane extends DisplayPane {
             };
         }
     }
+
+    /**
+     * Thanks to the this author:
+     *      https://gist.github.com/james-d/be5bbd6255a4640a5357#file-editcell-java-L109
+     */
     private class EditCell extends TableCell<Account, String>{
         private TextField textField;
         public EditCell(){}

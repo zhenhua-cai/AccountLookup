@@ -23,6 +23,7 @@ public class RegisterUserPane {
     private PasswordField passwordField;
     private PasswordField confirmPasswordField;
     private Button register;
+    private Button backToLogin;
 
     public GridPane getPane(){
         grid = getRoot();
@@ -54,10 +55,11 @@ public class RegisterUserPane {
         confirmPasswordField = new PasswordField();
         grid.add(confirmPasswordField, 1,3);
 
+        backToLogin = new Button("Back to login");
         register = new Button("Register");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(register);
+        hbBtn.getChildren().addAll(backToLogin,register);
 
         grid.add(hbBtn,1,4);
     }
@@ -85,5 +87,8 @@ public class RegisterUserPane {
     }
     public void setActionOnRegisterButton(EventHandler<? super MouseEvent> value){
         register.setOnMouseClicked(value);
+    }
+    public void setActionOnBackToLoginButton(EventHandler<? super MouseEvent> value){
+        backToLogin.setOnMouseClicked(value);
     }
 }

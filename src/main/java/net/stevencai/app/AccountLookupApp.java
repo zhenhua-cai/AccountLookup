@@ -4,7 +4,6 @@ import com.sun.istack.NotNull;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import net.stevencai.entity.Account;
 import net.stevencai.entity.User;
@@ -61,28 +60,43 @@ public class AccountLookupApp extends Application {
             validateUser(pane,scene);
         });
         pane.setActionOnRegisterButtonClicked(e->{
-            RegisterUserPane registerUserPane = new RegisterUserPane();
-            scene.setRoot(registerUserPane.getPane());
-            registerUserPane.setActionOnRegisterButton(event->{
-                User user = createUser(registerUserPane.getUsername(),registerUserPane.getPassword(),registerUserPane.getConfirmedPassword());
-                if(user == null){
-                    return;
-                }
-                try {
-                    accountLookupService.saveUser(user);
-                    swithToDisplayAccountaPane(scene);
-                    showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","User created!");
-                    this.user = user;
-                }
-                catch(ConstraintViolationException ex){
-                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to create user!","Username already exits.");
-                }
-                catch(Exception ex){
-                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to user account!","Unknown issue.");
-                }
-            });
-
+            switchToRegisterPanel(scene);
         });
+    }
+
+    private void switchToLoginPanel(Scene scene){
+        LoginPane loginPane = new LoginPane();
+        scene.setRoot(loginPane.getPane());
+        setActionOnLogin(loginPane,scene);
+    }
+
+    private void switchToRegisterPanel(Scene scene){
+        RegisterUserPane registerUserPane = new RegisterUserPane();
+        scene.setRoot(registerUserPane.getPane());
+        registerUserPane.setActionOnRegisterButton(event->{
+            registerButtonAction(registerUserPane,scene);
+        });
+        registerUserPane.setActionOnBackToLoginButton(e->{
+            switchToLoginPanel(scene);
+        });
+    }
+    private void registerButtonAction(RegisterUserPane registerUserPane, Scene scene){
+        User user = createUser(registerUserPane.getUsername(),registerUserPane.getPassword(),registerUserPane.getConfirmedPassword());
+        if(user == null){
+            return;
+        }
+        try {
+            accountLookupService.saveUser(user);
+            swithToDisplayAccountaPane(scene);
+            showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","User created!");
+            this.user = user;
+        }
+        catch(ConstraintViolationException ex){
+            showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to create user!","Username already exits.");
+        }
+        catch(Exception ex){
+            showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to user account!","Unknown issue.");
+        }
     }
 
     /**
@@ -215,23 +229,25 @@ public class AccountLookupApp extends Application {
      */
     private void setButtonToAddNewAccount(NewAccountPane newAccountPane,Scene scene){
         newAccountPane.setOnButtonClicked(click->{
-            Account account = newAccountPane.createAccount();
-            if(account == null){return;}
-            try {
-                account.setUser(this.user);
-                accountLookupService.saveAccount(account);
-                swithToDisplayAccountaPane(scene);
-                showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully added/updated account!");
-            }
-            catch(ConstraintViolationException ex){
-                showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!","Account already exits.");
-            }
-            catch(Exception ex){
-                showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!",ex.getMessage());
-            }
+            newAccountbuttonAction(newAccountPane,scene);
         });
     }
-
+    private void newAccountbuttonAction(NewAccountPane newAccountPane,Scene scene){
+        Account account = newAccountPane.createAccount();
+        if(account == null){return;}
+        try {
+            account.setUser(this.user);
+            accountLookupService.saveAccount(account);
+            swithToDisplayAccountaPane(scene);
+            showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully added/updated account!");
+        }
+        catch(ConstraintViolationException ex){
+            showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!","Account already exits.");
+        }
+        catch(Exception ex){
+            showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!",ex.getMessage());
+        }
+    }
     /**
      * switch display panel in scene
      * @param scene scene
@@ -332,6 +348,13 @@ public class AccountLookupApp extends Application {
         return  new User(username, password);
     }
 
+    /**
+     * validate password. must have more than 6 and less than 30 characters.
+     * can only contains letter, digit, special chars<code>.@&*#,:;</code> characters
+     * @param password password
+     * @param confirmedPassword confirmed password
+     * @return true if valid.
+     */
     private boolean validatePassword(String password, String confirmedPassword){
 
         if(password== null || password.length() == 0){

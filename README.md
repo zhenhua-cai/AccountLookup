@@ -44,5 +44,9 @@ MySQL setup
 ```
  3. Spring and Hibernate framework, see configuration: [Spring Configuration](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/spring-config.xml)
             
-
+## Usage
+#### Login window:
+![loginpage](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/loginwindow.png?raw=true)  
+when user run this app, it asks for user credentials. if there isn't an available account, user is able to register an new acount by clicking ```Register```button  
+![loginpage](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/registerwindow.png?raw=true)  
 

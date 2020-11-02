@@ -36,6 +36,9 @@ public class RegisterUserPane {
      * @param grid parent pane.
      */
     private void createForms(GridPane grid){
+        Text title = new Text("Sign Up");
+        title.setFont(Font.font("Tahoma", FontWeight.NORMAL,20));
+        grid.add(title,0,0,2,1);
 
         Label userName = new Label("User Name: ");
         grid.add(userName,0,1);

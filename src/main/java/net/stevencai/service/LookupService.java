@@ -1,6 +1,7 @@
 package net.stevencai.service;
 
 import net.stevencai.entity.Account;
+import net.stevencai.entity.User;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface LookupService {
     List<Account> getAccounts();
 
     void deleteAccount(Account account);
+    User getUser(String username);
+    boolean comparePassword(String passwordPlainText, String passwordInDB);
 }

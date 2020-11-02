@@ -4,10 +4,13 @@ import com.sun.istack.NotNull;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import net.stevencai.entity.Account;
+import net.stevencai.entity.User;
 import net.stevencai.pane.DisplayAccountsPane;
 import net.stevencai.pane.DisplayPane;
+import net.stevencai.pane.LoginPane;
 import net.stevencai.pane.NewAccountPane;
 import net.stevencai.service.LookupService;
 import org.hibernate.exception.ConstraintViolationException;
@@ -38,25 +41,47 @@ public class AccountLookupApp extends Application {
 
         //set up app title.
         stage.setTitle("Account Lookup");
+        stage.setWidth(1050);
+        stage.setHeight(600);
         stage.setResizable(false);
-
         stage.show();
     }
 
     /**
-     * get a scene with display account pane.
+     * get a scene with login pane.
      * @return a scene
      */
     private Scene getStartScene(){
-        DisplayAccountsPane pane = new DisplayAccountsPane();
-
-        Scene scene = new Scene(pane.createPane());
-
-        //set up actions on buttons and menus
-        setButtonsAction(pane);
-        setMenuActions(pane,scene);
-
+        LoginPane loginPane = new LoginPane();
+        Scene scene = new Scene(loginPane.getPane());
+        setActionOnLogin(loginPane,scene);
         return scene;
+    }
+
+    public void setActionOnLogin(LoginPane pane, Scene scene){
+        pane.setLoginButtonClicked(e->{
+            validateUser(pane,scene);
+        });
+    }
+
+    /**
+     * check if user is able to login.
+     * @param pane login pane.
+     * @param scene scene
+     */
+    private void validateUser(LoginPane pane, Scene scene){
+        String username = pane.getUserName();
+        String password = pane.getPassword();
+        User user = accountLookupService.getUser(username);
+        if(user == null || !accountLookupService.comparePassword(password,user.getPassword())){
+            showMessageBox(Alert.AlertType.ERROR,"Unable to login","Invalid User","Invalid username or password!");
+        }
+        else{
+            DisplayAccountsPane displayAccountsPane = new DisplayAccountsPane();
+            scene.setRoot(displayAccountsPane.createPane());
+            setButtonsAction(displayAccountsPane);
+            setMenuActions(displayAccountsPane,scene);
+        }
     }
 
     /**

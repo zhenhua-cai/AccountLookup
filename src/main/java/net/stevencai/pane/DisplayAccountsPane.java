@@ -34,7 +34,7 @@ public class DisplayAccountsPane extends DisplayPane {
     private String searchContent;
     private Button showAll;
 
-
+    //contains search results that will be displayed in table view.
     private ObservableList<Account> accounts= FXCollections.observableArrayList();
 
     public DisplayAccountsPane(){
@@ -50,6 +50,10 @@ public class DisplayAccountsPane extends DisplayPane {
         return pane;
     }
 
+    /**
+     * create searching fields.
+     * @return the searching area root.
+     */
     private HBox creatSearchArea(){
         HBox searchArea = new HBox();
         searchArea.setAlignment(Pos.CENTER);
@@ -86,6 +90,11 @@ public class DisplayAccountsPane extends DisplayPane {
 
         return searchArea;
     }
+
+    /**
+     * create text field
+     * @return text field
+     */
     private TextField createSearchBox(){
         TextField searchBox = new TextField();
         searchBox.setPadding(new Insets(10));
@@ -112,35 +121,33 @@ public class DisplayAccountsPane extends DisplayPane {
             }
         });
 
-
+        //account name, not editable
         TableColumn<Account,String> account= createTableColumn("Account Name");
         account.setCellValueFactory(new PropertyValueFactory<Account,String>("title"));
 
+        //user name
         TableColumn<Account,String> username = createTableColumn("Username");
         username.setCellValueFactory(new PropertyValueFactory<Account,String>("Username"));
-        //username.setCellFactory(TextFieldTableCell.forTableColumn());
-        username.setCellFactory(p->new EditCell());
         username.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setUsername(e.getNewValue());
         });
 
+        //password
         TableColumn<Account,String> password = createTableColumn("Password");
         password.setCellValueFactory(new PropertyValueFactory<Account,String>("Password"));
-        password.setCellFactory(p->new EditCell());
         password.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setPassword(e.getNewValue());
         });
 
+        //email
         TableColumn<Account,String> email = createTableColumn("Email");
         email.setCellValueFactory(new PropertyValueFactory<Account,String>("Email"));
-        email.setCellFactory(p->new EditCell());
         email.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setEmail(e.getNewValue());
         });
 
-        TableColumn<Account, LocalDateTime> lastUpdatedTime = new TableColumn<>("Last Updated Time");
-        lastUpdatedTime.setPrefWidth(210);
-        lastUpdatedTime.setResizable(false);
+        //last updated time.
+        TableColumn<Account, LocalDateTime> lastUpdatedTime =createTableDataTimeColumn("Last Updated Time");
         lastUpdatedTime.setCellValueFactory(new PropertyValueFactory<Account,LocalDateTime>("lastUpdatedTime"));
         lastUpdatedTime.setCellFactory(new LocalDateTimeFormatter());
 
@@ -148,10 +155,18 @@ public class DisplayAccountsPane extends DisplayPane {
         return table;
     }
 
+    private TableColumn<Account, LocalDateTime> createTableDataTimeColumn(String text){
+        TableColumn<Account, LocalDateTime> lastUpdatedTime = new TableColumn<>(text);
+        lastUpdatedTime.setPrefWidth(210);
+        lastUpdatedTime.setResizable(false);
+        return lastUpdatedTime;
+    }
+
     private TableColumn<Account,String> createTableColumn(String text){
         TableColumn<Account,String> column= new TableColumn<>(text);
         column.setPrefWidth(210);
         column.setResizable(false);
+        column.setCellFactory(p->new EditCell());
         return column;
     }
 
@@ -242,6 +257,10 @@ public class DisplayAccountsPane extends DisplayPane {
             setText(null);
             setGraphic(textField);
             textField.selectAll();
+
+            /*resolve focus issue:
+            *  need to click 3 times to gain the focus.
+            */
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {

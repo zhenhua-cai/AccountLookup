@@ -107,6 +107,9 @@ public class AccountLookupApp extends Application {
     private void validateUser(LoginPane pane, Scene scene){
         String username = pane.getUserName();
         String password = pane.getPassword();
+        if(username.length() == 0|| password.length() == 0){
+            return;
+        }
         User user = accountLookupService.getUser(username);
         if(user == null || !accountLookupService.comparePassword(password,user.getPassword())){
             showMessageBox(Alert.AlertType.ERROR,"Unable to login","Invalid User","Invalid username or password!");
@@ -183,7 +186,6 @@ public class AccountLookupApp extends Application {
             else{
                 searchAccounts(pane.getSearchContent(),pane);
             }
-
         });
     }
 

@@ -7,7 +7,7 @@ Make a standalone app that will store personal accounts(username, password) loca
     <li>This is an IntelliJ Maven project.</li>
     <li>
         This project uses MySQL database  <br>
-           ![alt Database-tables-relations](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/database_tables_realations.png)
+           [Database-tables-relations](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/database_tables_realations.png?raw=true)
         <ul>
             <li>
             set up JDBC URL:

@@ -161,6 +161,33 @@ public class AccountLookupApp extends Application {
     }
 
     /**
+     * set action on create new account button in NewAccountPane.
+     * show message when add account or fail.
+     * @param newAccountPane new account pane
+     * @param scene scene that contains newAccountPane
+     */
+    private void setButtonToAddNewAccount(NewAccountPane newAccountPane,Scene scene){
+        newAccountPane.setOnButtonClicked(click->{
+            Account account = newAccountPane.createAccount();
+            if(account == null){return;}
+            try {
+                accountLookupService.saveAccount(account);
+                DisplayAccountsPane displayPane = new DisplayAccountsPane();
+                scene.setRoot(displayPane.createPane());
+                setButtonsAction(displayPane);
+                setMenuActions(displayPane, scene);
+                showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully added/updated account!");
+            }
+            catch(ConstraintViolationException ex){
+                showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!","Account already exits.");
+            }
+            catch(Exception ex){
+                showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!",ex.getMessage());
+            }
+        });
+    }
+
+    /**
      * set actions on menus
      * @param pane display pane that contains menu.
      * @param scene the scene that contains display pane.
@@ -170,24 +197,7 @@ public class AccountLookupApp extends Application {
         pane.setOnNewAccount(e->{
             NewAccountPane newAccountPane = new NewAccountPane();
             scene.setRoot(newAccountPane.createPane());
-            newAccountPane.setOnButtonClicked(click->{
-                Account account = newAccountPane.createAccount();
-                if(account == null){return;}
-                try {
-                    accountLookupService.saveAccount(account);
-                    DisplayAccountsPane displayPane = new DisplayAccountsPane();
-                    scene.setRoot(displayPane.createPane());
-                    setButtonsAction(displayPane);
-                    setMenuActions(displayPane, scene);
-                    showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully added/updated account!");
-                }
-                catch(ConstraintViolationException ex){
-                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!","Account already exits.");
-                }
-                catch(Exception ex){
-                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!",ex.getMessage());
-                }
-            });
+            setButtonToAddNewAccount(newAccountPane,scene);
             setMenuActions(newAccountPane,scene);
         });
 
@@ -202,18 +212,7 @@ public class AccountLookupApp extends Application {
         //set action on Delete Account menu item.
         pane.setOnDeleteAccount(e->{
             if(pane instanceof DisplayAccountsPane){
-                Account account = ((DisplayAccountsPane)pane).deleteSelectedRow();
-                if(account == null){
-                    return;
-                }
-                try {
-                    accountLookupService.deleteAccount(account);
-                    showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully deleted account!");
-                }
-                catch(Exception ex){
-                    showMessageBox(Alert.AlertType.ERROR,"Error!",
-                            "Sorry! Failed to delete account!",ex.getMessage());
-                }
+                deleteAccount((DisplayAccountsPane) pane);
             }
         });
 
@@ -231,6 +230,25 @@ public class AccountLookupApp extends Application {
                 }
             }
         });
+    }
+
+    /**
+     * delete selected account in display pane.
+     * @param pane display pane
+     */
+    private void deleteAccount(DisplayAccountsPane pane){
+        Account account = pane.deleteSelectedRow();
+        if(account == null){
+            return;
+        }
+        try {
+            accountLookupService.deleteAccount(account);
+            showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully deleted account!");
+        }
+        catch(Exception ex){
+            showMessageBox(Alert.AlertType.ERROR,"Error!",
+                    "Sorry! Failed to delete account!",ex.getMessage());
+        }
     }
 
     /**

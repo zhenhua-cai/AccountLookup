@@ -7,26 +7,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import net.stevencai.entity.User;
 import net.stevencai.service.StringProcessUtil;
 
-public class LoginPane {
-
-    private Button login;
-    private Button register;
-    private TextField usernameField;
-    private TextField passwordField;
+public class RegisterUserPane {
     private GridPane grid;
+    private TextField usernameField;
+    private PasswordField passwordField;
+    private PasswordField confirmPasswordField;
+    private Button register;
 
     public GridPane getPane(){
         grid = getRoot();
-        createLoginForm(grid);
+        createForms(grid);
         return grid;
     }
 
@@ -34,10 +34,7 @@ public class LoginPane {
      * create a login form
      * @param grid parent pane.
      */
-    private void createLoginForm(GridPane grid){
-        Text title = new Text("Welcome");
-        title.setFont(Font.font("Tahoma", FontWeight.NORMAL,20));
-        grid.add(title,0,0,2,1);
+    private void createForms(GridPane grid){
 
         Label userName = new Label("User Name: ");
         grid.add(userName,0,1);
@@ -51,11 +48,17 @@ public class LoginPane {
         passwordField = new PasswordField();
         grid.add(passwordField, 1,2);
 
+        Label confirmPw= new Label("Confirm Password: ");
+        grid.add(confirmPw, 0, 3);
+
+        confirmPasswordField = new PasswordField();
+        grid.add(confirmPasswordField, 1,3);
+
         register = new Button("Register");
-        login = new Button("Login");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().addAll(register,login);
+        hbBtn.getChildren().add(register);
+
         grid.add(hbBtn,1,4);
     }
 
@@ -71,20 +74,16 @@ public class LoginPane {
         grid.setPadding(new Insets(25));
         return grid;
     }
-
-    public String getUserName(){
+    public String getUsername(){
         return StringProcessUtil.processInputFieldString(usernameField.getText());
     }
-
     public String getPassword(){
         return StringProcessUtil.processInputFieldString(passwordField.getText());
     }
-
-    public void setLoginButtonClicked(EventHandler<? super MouseEvent> value){
-        login.setOnMouseClicked(value);
+    public String getConfirmedPassword(){
+        return StringProcessUtil.processInputFieldString(confirmPasswordField.getText());
     }
-
-    public void setActionOnRegisterButtonClicked(EventHandler<? super MouseEvent> value){
+    public void setActionOnRegisterButton(EventHandler<? super MouseEvent> value){
         register.setOnMouseClicked(value);
     }
 }

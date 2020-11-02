@@ -30,6 +30,10 @@ public class Account implements Serializable {
     @Column
     private LocalDateTime lastUpdatedTime;
 
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name="user_id")
+    private User user;
+
     public Account() {
         this.lastUpdatedTime = LocalDateTime.now();
     }
@@ -63,6 +67,14 @@ public class Account implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getPassword() {

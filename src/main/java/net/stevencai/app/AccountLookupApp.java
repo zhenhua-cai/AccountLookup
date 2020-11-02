@@ -8,10 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import net.stevencai.entity.Account;
 import net.stevencai.entity.User;
-import net.stevencai.pane.DisplayAccountsPane;
-import net.stevencai.pane.DisplayPane;
-import net.stevencai.pane.LoginPane;
-import net.stevencai.pane.NewAccountPane;
+import net.stevencai.pane.*;
 import net.stevencai.service.LookupService;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,6 +21,7 @@ public class AccountLookupApp extends Application {
 
     private boolean showedAll = false;
     private boolean validSearch = false;
+    private User user;
 
     private static final LookupService accountLookupService;
     static{
@@ -62,6 +60,29 @@ public class AccountLookupApp extends Application {
         pane.setLoginButtonClicked(e->{
             validateUser(pane,scene);
         });
+        pane.setActionOnRegisterButtonClicked(e->{
+            RegisterUserPane registerUserPane = new RegisterUserPane();
+            scene.setRoot(registerUserPane.getPane());
+            registerUserPane.setActionOnRegisterButton(event->{
+                User user = createUser(registerUserPane.getUsername(),registerUserPane.getPassword(),registerUserPane.getConfirmedPassword());
+                if(user == null){
+                    return;
+                }
+                try {
+                    accountLookupService.saveUser(user);
+                    swithToDisplayAccountaPane(scene);
+                    showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","User created!");
+                    this.user = user;
+                }
+                catch(ConstraintViolationException ex){
+                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to create user!","Username already exits.");
+                }
+                catch(Exception ex){
+                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to user account!","Unknown issue.");
+                }
+            });
+
+        });
     }
 
     /**
@@ -81,6 +102,7 @@ public class AccountLookupApp extends Application {
             scene.setRoot(displayAccountsPane.createPane());
             setButtonsAction(displayAccountsPane);
             setMenuActions(displayAccountsPane,scene);
+            this.user = user;
         }
     }
 
@@ -102,10 +124,10 @@ public class AccountLookupApp extends Application {
     private void searchAccounts(String searchContent, DisplayAccountsPane pane, boolean showAll){
         List<Account> accounts;
         if(!showAll) {
-            accounts = accountLookupService.getAccount(searchContent);
+            accounts = accountLookupService.getAccount(searchContent, this.user);
         }
         else{
-            accounts = accountLookupService.getAccounts();
+            accounts = accountLookupService.getAccounts(this.user);
         }
         if(accounts.size() == 0){
             validSearch = false;
@@ -196,11 +218,9 @@ public class AccountLookupApp extends Application {
             Account account = newAccountPane.createAccount();
             if(account == null){return;}
             try {
+                account.setUser(this.user);
                 accountLookupService.saveAccount(account);
-                DisplayAccountsPane displayPane = new DisplayAccountsPane();
-                scene.setRoot(displayPane.createPane());
-                setButtonsAction(displayPane);
-                setMenuActions(displayPane, scene);
+                swithToDisplayAccountaPane(scene);
                 showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully added/updated account!");
             }
             catch(ConstraintViolationException ex){
@@ -210,6 +230,17 @@ public class AccountLookupApp extends Application {
                 showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!",ex.getMessage());
             }
         });
+    }
+
+    /**
+     * switch display panel in scene
+     * @param scene scene
+     */
+    private void swithToDisplayAccountaPane(Scene scene){
+        DisplayAccountsPane displayPane = new DisplayAccountsPane();
+        scene.setRoot(displayPane.createPane());
+        setButtonsAction(displayPane);
+        setMenuActions(displayPane, scene);
     }
 
     /**
@@ -290,6 +321,82 @@ public class AccountLookupApp extends Application {
         alert.setHeaderText(header);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    private User createUser(String username, String password, String confirmedPassword){
+        if(!validateUsername(username)){
+            return null;
+        }
+        if(!validatePassword(password,confirmedPassword)){
+            return null;
+        }
+        return  new User(username, password);
+    }
+
+    private boolean validatePassword(String password, String confirmedPassword){
+
+        if(password== null || password.length() == 0){
+            showMessageBox(Alert.AlertType.ERROR, "Error","Invalid password","Password cannot be empty");
+            return false;
+        }
+
+        if(!password.equals(confirmedPassword)){
+            showMessageBox(Alert.AlertType.ERROR, "Error","Password not match!","password not match");
+            return false;
+        }
+        if(password.length() < 6){
+            showMessageBox(Alert.AlertType.ERROR, "Error","Invalid password","Password cannot have less than 6 characters");
+            return false;
+        }
+        if(password.length() > 30){
+            showMessageBox(Alert.AlertType.ERROR, "Error","Invalid password","Password cannot have more than 30 characters");
+            return false;
+        }
+        String punctuations = ".@&*#,:;";
+        for(int i =0;i<password.length();i++){
+            char c = password.charAt(i);
+            if(!Character.isLetterOrDigit(c) && !isSpecitalChar(c)){
+                showMessageBox(Alert.AlertType.ERROR, "Error","Invalid password",
+                        "Password contains invalid characters." +
+                                "\nOnly letters, digits, "+punctuations+" are allowed.");
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean isSpecitalChar(char c){
+        switch(c){
+            case '.':
+            case ',':
+            case ':':
+            case ';':
+            case '@':
+            case '&':
+                return true;
+            default:
+                return false;
+        }
+    }
+    /**
+     * validate username.
+     * @param username username
+     * @return true if valid.
+     */
+    private boolean validateUsername(String username){
+        if(username== null || username.length() == 0){
+            showMessageBox(Alert.AlertType.ERROR, "Error","Invalid username","username cannot be empty");
+            return false;
+        }
+        if(username.length() >= 25){
+            showMessageBox(Alert.AlertType.ERROR, "Error","Invalid username","Username cannot have more than 25 characters");
+            return false;
+        }
+        for(int i = 0;i<username.length();i++){
+            if(!Character.isLetterOrDigit(username.charAt(i))){
+                showMessageBox(Alert.AlertType.ERROR, "Error","Invalid username","Username can only contains letters or digits");
+                return false;
+            }
+        }
+        return true;
     }
     /**
      * Run Account Lookup app.

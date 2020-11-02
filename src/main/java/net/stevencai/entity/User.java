@@ -1,26 +1,49 @@
 package net.stevencai.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import net.stevencai.security.LoginVerify;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="user")
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    public String username;
+    private int id;
 
     @Column
-    public String password;
+    private String username;
+
+    @Column
+    private String password;
+
+    @OneToMany(fetch=FetchType.LAZY, cascade =CascadeType.ALL,mappedBy = "user")
+    private List<Account> accounts;
 
     public User(){}
 
     public User(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.password = LoginVerify.hashPassword(password);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     public String getUsername() {
@@ -36,6 +59,6 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password =LoginVerify.hashPassword(password);
     }
 }

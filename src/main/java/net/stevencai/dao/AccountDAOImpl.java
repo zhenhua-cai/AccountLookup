@@ -1,6 +1,7 @@
 package net.stevencai.dao;
 
 import net.stevencai.entity.Account;
+import net.stevencai.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -22,12 +23,12 @@ public class AccountDAOImpl implements AccountDAO{
     }
 
     @Override
-    public List<Account> getAccounts() {
+    public List<Account> getAccounts(User user) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Account> query = session.createQuery("from Account",Account.class);
+        Query<Account> query = session.createQuery("from Account a where a.user.id =:userId",Account.class);
+        query.setParameter("userId",user.getId());
         return query.getResultList();
     }
-
     @Override
     public void saveAccount(Account account) {
         Session session = sessionFactory.getCurrentSession();
@@ -42,10 +43,11 @@ public class AccountDAOImpl implements AccountDAO{
     }
 
     @Override
-    public List<Account> getAccount(String title) {
+    public List<Account> getAccount(String title, User user) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Account> query = session.createQuery("from Account a where a.title like :title",Account.class);
+        Query<Account> query = session.createQuery("from Account a where a.title like :title and a.user.id =:userId",Account.class);
         query.setParameter("title","%"+title+"%");
+        query.setParameter("userId",user.getId());
         return query.getResultList();
     }
 

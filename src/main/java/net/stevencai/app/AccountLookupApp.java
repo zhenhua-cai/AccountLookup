@@ -38,7 +38,7 @@ public class AccountLookupApp extends Application {
 
         //set up app title.
         stage.setTitle("Account Lookup");
-        stage.setWidth(1050);
+        stage.setWidth(1068);
         stage.setHeight(600);
         stage.setResizable(false);
         stage.show();

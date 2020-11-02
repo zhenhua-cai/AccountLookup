@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -97,6 +98,14 @@ public class DisplayAccountsPane extends DisplayPane {
         table = new TableView<>();
         table.setEditable(true);
         table.setItems(accounts);
+        table.focusedProperty().addListener((obs,oldVal, newVal) ->{
+            if(!newVal){
+                table.getSelectionModel().getSelectedCells().forEach(c->{
+
+                });
+                table.getSelectionModel().clearSelection();
+            }
+        });
 
         TableColumn<Account,String> account= createTableColumn("Account Name");
         account.setCellValueFactory(new PropertyValueFactory<Account,String>("title"));
@@ -126,7 +135,7 @@ public class DisplayAccountsPane extends DisplayPane {
         lastUpdatedTime.setPrefWidth(210);
         lastUpdatedTime.setResizable(false);
         lastUpdatedTime.setCellValueFactory(new PropertyValueFactory<Account,LocalDateTime>("lastUpdatedTime"));
-        lastUpdatedTime.setCellFactory(new LocalDateTimeFormatter<Account,LocalDateTime>());
+        lastUpdatedTime.setCellFactory(new LocalDateTimeFormatter());
 
         table.getColumns().addAll(account,username,password,email,lastUpdatedTime);
         return table;
@@ -178,24 +187,26 @@ public class DisplayAccountsPane extends DisplayPane {
         accounts.clear();
     }
 
-    private class LocalDateTimeFormatter<S,T> implements Callback<TableColumn<S,T>, TableCell<S,T>> {
+    private class LocalDateTimeFormatter implements Callback<TableColumn<Account,LocalDateTime>, TableCell<Account,LocalDateTime>> {
 
         private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss");
 
         @Override
-        public TableCell<S, T> call(TableColumn<S, T> param) {
-            return new TableCell<S,T>(){
+        public TableCell<Account, LocalDateTime> call(TableColumn<Account, LocalDateTime> param) {
+            return new TableCell<Account,LocalDateTime>(){
                 @Override
-                protected void updateItem(T item, boolean empty){
+                protected void updateItem(LocalDateTime item, boolean empty){
                     super.updateItem(item,empty);
                     if(item == null || empty){
                         setGraphic(null);
                     }
                     else{
-                        setGraphic(new Label(((LocalDateTime)item).format(formatter)));
+                        setGraphic(new Label(item.format(formatter)));
                     }
                 }
+
             };
         }
     }
+
 }

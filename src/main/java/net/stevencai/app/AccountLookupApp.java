@@ -97,10 +97,18 @@ public class AccountLookupApp extends Application {
             showedAll = true;
         });
     }
+    private void setClearAllButtonAction(DisplayAccountsPane pane){
+        pane.setOnClearTableAction(e->{
+            validSearch =false;
+            showedAll = false;
+            pane.clearSearch();
+        });
+    }
     private void setButtonsAction(DisplayAccountsPane pane){
         setSearchButtionAction(pane);
         setRefreshButtonAction(pane);
         setShowAllButtonAction(pane);
+        setClearAllButtonAction(pane);
     }
     public void setMenuActions(DisplayPane pane,Scene scene){
         pane.setOnNewAccount(e->{

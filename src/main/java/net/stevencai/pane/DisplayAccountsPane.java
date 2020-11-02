@@ -11,8 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -30,9 +29,11 @@ public class DisplayAccountsPane extends DisplayPane {
     private TextField accountName;
     private Button searchButton;
     private Button refreshButton;
+    private Button clearTable;
     private TableView<Account> table;
     private String searchContent;
     private Button showAll;
+
 
     private ObservableList<Account> accounts= FXCollections.observableArrayList();
 
@@ -76,7 +77,12 @@ public class DisplayAccountsPane extends DisplayPane {
         showAll.setPadding(new Insets(10));
         HBox.setMargin(showAll,new Insets(10));
 
-        searchArea.getChildren().addAll(accountLabel,accountName,searchButton,refreshButton,showAll);
+        //showAll button
+        clearTable = new Button("Clear");
+        clearTable.setPadding(new Insets(10));
+        HBox.setMargin(clearTable,new Insets(10));
+
+        searchArea.getChildren().addAll(accountLabel,accountName,searchButton,refreshButton,showAll,clearTable);
 
         return searchArea;
     }
@@ -171,6 +177,10 @@ public class DisplayAccountsPane extends DisplayPane {
         showAll.setOnMouseClicked(value);
     }
 
+    public void setOnClearTableAction(EventHandler<? super MouseEvent> value){
+        clearTable.setOnMouseClicked(value);
+    }
+
     public String getAccountNameText(){
         searchContent = StringProcessUtil.processInputFieldString(accountName.getText());
         return searchContent;
@@ -186,6 +196,10 @@ public class DisplayAccountsPane extends DisplayPane {
     }
     public void clearAccountTables(){
         accounts.clear();
+    }
+    public void clearSearch(){
+        clearAccountTables();
+        searchContent = null;
     }
 
     private class LocalDateTimeFormatter implements Callback<TableColumn<Account,LocalDateTime>, TableCell<Account,LocalDateTime>> {
@@ -216,7 +230,15 @@ public class DisplayAccountsPane extends DisplayPane {
      */
     private class EditCell extends TableCell<Account, String>{
         private TextField textField;
-        public EditCell(){}
+        public EditCell(){
+            this.setOnMouseClicked(e->{
+                if(e.getButton().equals(MouseButton.SECONDARY)){
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString(getItem());
+                    Clipboard.getSystemClipboard().setContent(content);
+                }
+            });
+        }
         @Override
         public void startEdit(){
             super.startEdit();

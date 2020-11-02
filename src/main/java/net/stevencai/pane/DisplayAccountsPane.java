@@ -1,7 +1,9 @@
 package net.stevencai.pane;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -98,35 +100,34 @@ public class DisplayAccountsPane extends DisplayPane {
         table = new TableView<>();
         table.setEditable(true);
         table.setItems(accounts);
-        table.focusedProperty().addListener((obs,oldVal, newVal) ->{
-            if(!newVal){
-                table.getSelectionModel().getSelectedCells().forEach(c->{
-
-                });
-                table.getSelectionModel().clearSelection();
+        table.focusedProperty().addListener((obs, oldValue, newValue)->{
+            if(newValue){
+               table.getSelectionModel().clearSelection();
             }
         });
+
 
         TableColumn<Account,String> account= createTableColumn("Account Name");
         account.setCellValueFactory(new PropertyValueFactory<Account,String>("title"));
 
         TableColumn<Account,String> username = createTableColumn("Username");
         username.setCellValueFactory(new PropertyValueFactory<Account,String>("Username"));
-        username.setCellFactory(TextFieldTableCell.forTableColumn());
+        //username.setCellFactory(TextFieldTableCell.forTableColumn());
+        username.setCellFactory(p->new EditCell());
         username.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setUsername(e.getNewValue());
         });
 
         TableColumn<Account,String> password = createTableColumn("Password");
         password.setCellValueFactory(new PropertyValueFactory<Account,String>("Password"));
-        password.setCellFactory(TextFieldTableCell.forTableColumn());
+        password.setCellFactory(p->new EditCell());
         password.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setPassword(e.getNewValue());
         });
 
         TableColumn<Account,String> email = createTableColumn("Email");
         email.setCellValueFactory(new PropertyValueFactory<Account,String>("Email"));
-        email.setCellFactory(TextFieldTableCell.forTableColumn());
+        email.setCellFactory(p->new EditCell());
         email.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setEmail(e.getNewValue());
         });
@@ -208,5 +209,86 @@ public class DisplayAccountsPane extends DisplayPane {
             };
         }
     }
+    private class EditCell extends TableCell<Account, String>{
+        private TextField textField;
+        public EditCell(){}
+        @Override
+        public void startEdit(){
+            super.startEdit();
+            if(textField == null){
+                createTextField();
+            }
+            setText(null);
+            setGraphic(textField);
+            textField.selectAll();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    textField.requestFocus();
+                }
+            });
+        }
 
+        @Override
+        public void cancelEdit(){
+            super.cancelEdit();
+            setText(getItem());
+            setGraphic(null);
+        }
+
+        @Override
+        public void updateItem(String item, boolean empty){
+            super.updateItem(item,empty);
+            if(empty){
+                setText(null);
+                setGraphic(null);
+            }
+            else{
+                if(isEditing()){
+                    if(textField != null){
+                        textField.setText(getItem());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                }
+                else{
+                    setText(getItem());
+                    setGraphic(null);
+                }
+            }
+        }
+        @Override
+        public void commitEdit(String item){
+            if(!isEditing() && !item.equals(getItem())){
+                TableView<Account> table = getTableView();
+                if(table != null){
+                    TableColumn<Account, String> column = getTableColumn();
+                    TableColumn.CellEditEvent<Account,String> event = new TableColumn.CellEditEvent<>(
+                            table, new TablePosition<Account,String>(table,getIndex(), column),
+                            TableColumn.editCommitEvent(),item
+                    );
+                    Event.fireEvent(column, event);
+                }
+            }
+            super.commitEdit(item);
+        }
+
+        private void createTextField(){
+            textField = new TextField(getItem());
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+            textField.setOnKeyReleased(event -> {
+                if(event.getCode() == KeyCode.ENTER){
+                    commitEdit(textField.getText());
+                }
+                else if(event.getCode() == KeyCode.ESCAPE){
+                    cancelEdit();
+                }
+            });
+            textField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if(!newVal){
+                    commitEdit(textField.getText());
+                }
+            });
+        }
+    }
 }

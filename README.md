@@ -1,8 +1,8 @@
 # AccountLookup
-##Goal
+## Goal
 Make a standalone app that will store personal accounts(username, password) locally.  
 
-##Setup
+## Setup
 1. This is an IntelliJ Maven project.
 2. This project uses MySQL database  
 ![Database-tables-relations](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/database_tables_realations.png?raw=true)  

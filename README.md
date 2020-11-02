@@ -59,6 +59,7 @@ when user run this app, it asks for user credentials. if there isn't an availabl
 
 From this display window, user is able to show/search previously store accounts, these accounts are only associate with logged in user. which mean
 current user is NOT able to see other users' data.  
+By right clicking on the table cell, user is able to copy data into clipboard.  
 
 ![menu](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/menu.png?raw=true)  
 

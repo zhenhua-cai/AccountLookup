@@ -45,8 +45,15 @@ MySQL setup
  3. Spring and Hibernate framework, see configuration: [Spring Configuration](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/spring-config.xml)
             
 ## Usage
-#### Login window:
+#### Login/Register window:
 ![loginpage](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/loginwindow.png?raw=true)  
 when user run this app, it asks for user credentials. if there isn't an available account, user is able to register an new acount by clicking ```Register```button  
-![loginpage](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/registerwindow.png?raw=true)  
+![registerpage](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/registerwindow.png?raw=true)  
+
+#### Main display window:
+![displaypage](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/displaywindow.png?raw=true)  
+From this display window, user is able to show/search previously store accounts, these accounts are only associate with logged in user. which mean
+current user is NOT able to see other users' data.
+![menu](https://github.com/zhenhua-cai/AccountLookup/blob/master/src/main/resources/menu.png?raw=true)  
+From the menu items, user is able to perform different actions, such add new account, search account, update account, and delete account.
 

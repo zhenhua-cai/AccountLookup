@@ -231,13 +231,7 @@ public class DisplayAccountsPane extends DisplayPane {
     private class EditCell extends TableCell<Account, String>{
         private TextField textField;
         public EditCell(){
-            this.setOnMouseClicked(e->{
-                if(e.getButton().equals(MouseButton.SECONDARY)){
-                    ClipboardContent content = new ClipboardContent();
-                    content.putString(getItem());
-                    Clipboard.getSystemClipboard().setContent(content);
-                }
-            });
+            createContextMenu();
         }
         @Override
         public void startEdit(){
@@ -316,6 +310,21 @@ public class DisplayAccountsPane extends DisplayPane {
                     commitEdit(textField.getText());
                 }
             });
+        }
+
+        /**
+         * create context menu. which is used to copy content.
+         */
+        private void createContextMenu(){
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem copy = new MenuItem("Copy");
+            copy.setOnAction(e->{
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString(getItem());
+                    Clipboard.getSystemClipboard().setContent(content);
+            });
+            contextMenu.getItems().add(copy);
+            this.setContextMenu(contextMenu);
         }
     }
 }

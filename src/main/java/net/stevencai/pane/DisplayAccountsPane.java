@@ -115,19 +115,16 @@ public class DisplayAccountsPane extends DisplayPane {
         table = new TableView<>();
         table.setEditable(true);
         table.setItems(accounts);
-        table.focusedProperty().addListener((obs, oldValue, newValue)->{
-            if(newValue){
-               table.getSelectionModel().clearSelection();
-            }
-        });
 
         //account name, not editable
         TableColumn<Account,String> account= createTableColumn("Account Name");
         account.setCellValueFactory(new PropertyValueFactory<Account,String>("title"));
+        account.setCellFactory(p->new EditCell());
 
         //user name
         TableColumn<Account,String> username = createTableColumn("Username");
         username.setCellValueFactory(new PropertyValueFactory<Account,String>("Username"));
+        username.setCellFactory(p->new EditCell());
         username.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setUsername(e.getNewValue());
         });
@@ -135,6 +132,7 @@ public class DisplayAccountsPane extends DisplayPane {
         //password
         TableColumn<Account,String> password = createTableColumn("Password");
         password.setCellValueFactory(new PropertyValueFactory<Account,String>("Password"));
+        password.setCellFactory(p->new PasswordEditCell());
         password.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setPassword(e.getNewValue());
         });
@@ -142,6 +140,7 @@ public class DisplayAccountsPane extends DisplayPane {
         //email
         TableColumn<Account,String> email = createTableColumn("Email");
         email.setCellValueFactory(new PropertyValueFactory<Account,String>("Email"));
+        email.setCellFactory(p->new EditCell());
         email.setOnEditCommit(e->{
             table.getItems().get(e.getTablePosition().getRow()).setEmail(e.getNewValue());
         });
@@ -166,7 +165,6 @@ public class DisplayAccountsPane extends DisplayPane {
         TableColumn<Account,String> column= new TableColumn<>(text);
         column.setPrefWidth(210);
         column.setResizable(false);
-        column.setCellFactory(p->new EditCell());
         return column;
     }
 
@@ -239,6 +237,16 @@ public class DisplayAccountsPane extends DisplayPane {
         }
     }
 
+    private class PasswordEditCell extends EditCell{
+        @Override
+        public void updateItem(String item, boolean empty){
+            super.updateItem(item,empty);
+            if(!empty && !isEditing()){
+                setText("******");
+                setGraphic(null);
+            }
+        }
+    }
     /**
      * Thanks to the this author:
      *      https://gist.github.com/james-d/be5bbd6255a4640a5357#file-editcell-java-L109

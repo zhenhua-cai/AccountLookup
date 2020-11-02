@@ -28,16 +28,20 @@ public class ManuPane {
         menuBar = new MenuBar();
         Menu menu = new Menu("File");
 
+        //new Account
         MenuItem newAccount =new MenuItem("New Account");
         menuBar.getMenus().add(menu);
         menu.getItems().add(newAccount);
 
+        //search account
         MenuItem searchAccount = new MenuItem("Search Account");
         menu.getItems().add(searchAccount);
 
+        //update account
         MenuItem updateAccount = new MenuItem("Update Account");
         menu.getItems().add(updateAccount);
 
+        //delete account
         MenuItem deleteAccount = new MenuItem("Delete Account");
         menu.getItems().add(deleteAccount);
     }

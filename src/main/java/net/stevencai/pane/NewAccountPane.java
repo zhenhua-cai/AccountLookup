@@ -33,6 +33,11 @@ public class NewAccountPane extends DisplayPane{
         createFields(primaryPane);
         return primaryPane;
     }
+
+    /**
+     * create the pane that use to add new account
+     * @param pane root pane.
+     */
     private void createFields(Pane pane){
         HBox hBox =new HBox();
         hBox.setAlignment(Pos.CENTER);
@@ -47,6 +52,14 @@ public class NewAccountPane extends DisplayPane{
         VBox.setMargin(root,new Insets(30,20,20,20));
         pane.getChildren().add(hBox);
     }
+
+    /**
+     * create fields
+     * @param text label table
+     * @param root parent pane
+     * @param hideInputContext whether it's a Password Field or TextField.
+     * @return created field.
+     */
     private TextField createField(String text, VBox root, boolean hideInputContext){
         HBox row = new HBox(10);
         Label label = new Label(text);
@@ -69,11 +82,22 @@ public class NewAccountPane extends DisplayPane{
         root.getChildren().add(row);
         return field;
     }
-
+    /**
+     * create fields
+     * @param text label table
+     * @param root parent pane
+     * @return created field.
+     */
     private TextField createField(String text, VBox root){
         return createField(text,root, false);
     }
 
+    /**
+     * add a button
+     * @param text button text
+     * @param root parent pane.
+     * @return button
+     */
     private Button addButton(String text, VBox root){
         HBox row = new HBox();
         HBox.setMargin(row,new Insets(20));
@@ -86,6 +110,11 @@ public class NewAccountPane extends DisplayPane{
         root.getChildren().add(row);
         return addButton;
     }
+
+    /**
+     * create a account. values are from pane input fields.
+     * @return created account. if account field is invalid, return null.
+     */
     public Account createAccount() {
         Account account = new Account();
         String titleStr = StringProcessUtil.processInputFieldString(this.title.getText());

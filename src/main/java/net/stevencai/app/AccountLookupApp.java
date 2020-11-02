@@ -126,7 +126,7 @@ public class AccountLookupApp extends Application {
                     showMessageBox(Alert.AlertType.INFORMATION,"Success!","Congrats!","Successfully added/updated account!");
                 }
                 catch(ConstraintViolationException ex){
-                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!","Account Name already exits.");
+                    showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!","Account already exits.");
                 }
                 catch(Exception ex){
                     showMessageBox(Alert.AlertType.ERROR,"Error!","Sorry! Failed to added/updated account!",ex.getMessage());

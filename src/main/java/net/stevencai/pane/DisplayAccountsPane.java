@@ -67,22 +67,22 @@ public class DisplayAccountsPane extends DisplayPane {
         searchButton.setPadding(new Insets(10));
         HBox.setMargin(searchButton,new Insets(10));
 
+        //showAll button
+        showAll = new Button("Show All");
+        showAll.setPadding(new Insets(10));
+        HBox.setMargin(showAll,new Insets(10));
+
         //refresh button
         refreshButton = new Button("Refresh");
         refreshButton.setPadding(new Insets(10));
         HBox.setMargin(refreshButton,new Insets(10));
 
         //showAll button
-        showAll = new Button("Show All");
-        showAll.setPadding(new Insets(10));
-        HBox.setMargin(showAll,new Insets(10));
-
-        //showAll button
         clearTable = new Button("Clear");
         clearTable.setPadding(new Insets(10));
         HBox.setMargin(clearTable,new Insets(10));
 
-        searchArea.getChildren().addAll(accountLabel,accountName,searchButton,refreshButton,showAll,clearTable);
+        searchArea.getChildren().addAll(accountLabel,accountName,searchButton,showAll,refreshButton,clearTable);
 
         return searchArea;
     }

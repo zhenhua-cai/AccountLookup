@@ -46,6 +46,7 @@
         <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.3.0" />
         <element id="library" level="project" name="Spring-5.2.3.RELEASE" />
       </element>
+      <element id="library" level="project" name="Maven: org.mindrot:jbcrypt:0.4" />
     </root>
   </artifact>
 </component>

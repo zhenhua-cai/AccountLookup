@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author steven cai
- * @version V1.1
+ * @version V2.0
  */
 public class MainApp
 {

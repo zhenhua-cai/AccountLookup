@@ -1,6 +1,6 @@
 # AccountLookup
 ## Goal
-Make a standalone app that will store personal accounts(username, password) locally.  
+Make a standalone app that stores personal accounts(username, password) locally.  
 
 ## Setup
 1. This is an IntelliJ Maven project, see dependencies here: [pom.xml](https://github.com/zhenhua-cai/AccountLookup/blob/master/pom.xml)

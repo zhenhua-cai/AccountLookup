@@ -34,7 +34,7 @@ public class AccountLookupService implements LookupService {
 
     @Transactional
     @Override
-    public List<Account> getAccount(String title, User user){
+    public List<Account> getAccount(String title, User user) {
         return accountDAO.getAccount(title, user);
     }
 
@@ -76,7 +76,7 @@ public class AccountLookupService implements LookupService {
     @Transactional
     @Override
     public void saveUser(User user) {
-       userDAO.saveUser(user);
+        userDAO.saveUser(user);
     }
 
     @Transactional

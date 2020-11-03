@@ -16,12 +16,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUser(String username) {
         Session session = sessionFactory.getCurrentSession();
-        Query<User> query = session.createQuery("from User u where u.username=:username",User.class);
-        query.setParameter("username",username);
+        Query<User> query = session.createQuery("from User u where u.username=:username", User.class);
+        query.setParameter("username", username);
         try {
             return query.getSingleResult();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }

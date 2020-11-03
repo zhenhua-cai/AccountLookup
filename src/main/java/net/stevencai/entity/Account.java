@@ -7,11 +7,11 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="account")
+@Table(name = "account")
 public class Account implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
 
@@ -30,8 +30,8 @@ public class Account implements Serializable {
     @Column
     private LocalDateTime lastUpdatedTime;
 
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinColumn(name="user_id")
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Account() {
@@ -78,12 +78,11 @@ public class Account implements Serializable {
     }
 
     public String getPassword() {
-        String key = password.substring(0, PasswordEncoder.getKeySize()/4);
-        String encryptedPw = password.substring(PasswordEncoder.getKeySize()/4);
+        String key = password.substring(0, PasswordEncoder.getKeySize() / 4);
+        String encryptedPw = password.substring(PasswordEncoder.getKeySize() / 4);
         try {
             return PasswordEncoder.decryptPassword(encryptedPw, key);
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -92,9 +91,8 @@ public class Account implements Serializable {
         try {
             String key = PasswordEncoder.generateKey();
 
-            this.password = key+PasswordEncoder.encryptPassword(password,key);
-        }
-        catch(Exception ex){
+            this.password = key + PasswordEncoder.encryptPassword(password, key);
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }

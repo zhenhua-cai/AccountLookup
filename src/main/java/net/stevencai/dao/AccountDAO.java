@@ -8,6 +8,7 @@ import java.util.List;
 public interface AccountDAO {
 
     List<Account> getAccounts(User user);
+
     void saveAccount(Account account);
 
     Account getAccount(int accountId);

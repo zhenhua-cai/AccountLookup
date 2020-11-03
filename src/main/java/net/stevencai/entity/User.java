@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
 
     @Id
@@ -20,10 +20,11 @@ public class User {
     @Column
     private String password;
 
-    @OneToMany(fetch=FetchType.LAZY, cascade =CascadeType.ALL,mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Account> accounts;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String username, String password) {
         this.username = username;
@@ -59,6 +60,6 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password =LoginVerify.hashPassword(password);
+        this.password = LoginVerify.hashPassword(password);
     }
 }

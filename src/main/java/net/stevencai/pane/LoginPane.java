@@ -24,7 +24,7 @@ public class LoginPane {
     private TextField passwordField;
     private GridPane grid;
 
-    public GridPane getPane(){
+    public GridPane getPane() {
         grid = getRoot();
         createLoginForm(grid);
         return grid;
@@ -32,38 +32,40 @@ public class LoginPane {
 
     /**
      * create a login form
+     *
      * @param grid parent pane.
      */
-    private void createLoginForm(GridPane grid){
+    private void createLoginForm(GridPane grid) {
         Text title = new Text("Welcome");
-        title.setFont(Font.font("Tahoma", FontWeight.NORMAL,20));
-        grid.add(title,0,0,2,1);
+        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(title, 0, 0, 2, 1);
 
         Label userName = new Label("User Name: ");
-        grid.add(userName,0,1);
+        grid.add(userName, 0, 1);
 
         usernameField = new TextField();
-        grid.add(usernameField,1,1);
+        grid.add(usernameField, 1, 1);
 
         Label pw = new Label("Password: ");
-        grid.add(pw,0,2);
+        grid.add(pw, 0, 2);
 
         passwordField = new PasswordField();
-        grid.add(passwordField, 1,2);
+        grid.add(passwordField, 1, 2);
 
         register = new Button("Register");
         login = new Button("Login");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().addAll(register,login);
-        grid.add(hbBtn,1,4);
+        hbBtn.getChildren().addAll(register, login);
+        grid.add(hbBtn, 1, 4);
     }
 
     /**
      * create the root pane.
+     *
      * @return grid pane.
      */
-    private GridPane getRoot(){
+    private GridPane getRoot() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -72,19 +74,19 @@ public class LoginPane {
         return grid;
     }
 
-    public String getUserName(){
+    public String getUserName() {
         return StringProcessUtil.processInputFieldString(usernameField.getText());
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return StringProcessUtil.processInputFieldString(passwordField.getText());
     }
 
-    public void setLoginButtonClicked(EventHandler<? super MouseEvent> value){
+    public void setLoginButtonClicked(EventHandler<? super MouseEvent> value) {
         login.setOnMouseClicked(value);
     }
 
-    public void setActionOnRegisterButtonClicked(EventHandler<? super MouseEvent> value){
+    public void setActionOnRegisterButtonClicked(EventHandler<? super MouseEvent> value) {
         register.setOnMouseClicked(value);
     }
 }

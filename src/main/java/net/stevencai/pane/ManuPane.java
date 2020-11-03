@@ -18,18 +18,19 @@ public class ManuPane {
         createPane();
     }
 
-    private Pane createPane(){
+    private Pane createPane() {
         primaryPane = new VBox();
         createMenuBar();
         primaryPane.getChildren().addAll(menuBar);
         return primaryPane;
     }
-    private void createMenuBar(){
+
+    private void createMenuBar() {
         menuBar = new MenuBar();
         Menu menu = new Menu("File");
 
         //new Account
-        MenuItem newAccount =new MenuItem("New Account");
+        MenuItem newAccount = new MenuItem("New Account");
         menuBar.getMenus().add(menu);
         menu.getItems().add(newAccount);
 
@@ -50,25 +51,30 @@ public class ManuPane {
         menu.getItems().add(logout);
     }
 
-    public MenuBar getMenuBar(){
+    public MenuBar getMenuBar() {
         return menuBar;
     }
 
-    public void setOnNewAccount(EventHandler<ActionEvent> value){
+    public void setOnNewAccount(EventHandler<ActionEvent> value) {
         menuBar.getMenus().get(0).getItems().get(0).setOnAction(value);
     }
-    public void setOnSearchAccount(EventHandler<ActionEvent> value){
+
+    public void setOnSearchAccount(EventHandler<ActionEvent> value) {
         menuBar.getMenus().get(0).getItems().get(1).setOnAction(value);
     }
-    public void setOnUpdateAccount(EventHandler<ActionEvent> value){
+
+    public void setOnUpdateAccount(EventHandler<ActionEvent> value) {
         menuBar.getMenus().get(0).getItems().get(2).setOnAction(value);
     }
-    public void setOnDeleteAccount(EventHandler<ActionEvent> value){
+
+    public void setOnDeleteAccount(EventHandler<ActionEvent> value) {
         menuBar.getMenus().get(0).getItems().get(3).setOnAction(value);
     }
-    public void setOnLogoutUser(EventHandler<ActionEvent> value){
+
+    public void setOnLogoutUser(EventHandler<ActionEvent> value) {
         menuBar.getMenus().get(0).getItems().get(4).setOnAction(value);
     }
+
     public VBox getPrimaryPane() {
         return primaryPane;
     }

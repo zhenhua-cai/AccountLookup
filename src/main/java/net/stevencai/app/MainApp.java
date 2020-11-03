@@ -9,11 +9,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author steven cai
  * @version V2.0
  */
-public class MainApp
-{
+public class MainApp {
 
-    public static void main( String[] args )
-    {
+    public static void main(String[] args) {
         AccountLookupApp.run();
     }
 }

@@ -16,7 +16,7 @@ import javafx.scene.text.TextAlignment;
 import net.stevencai.entity.Account;
 import net.stevencai.service.StringProcessUtil;
 
-public class NewAccountPane extends DisplayPane{
+public class NewAccountPane extends DisplayPane {
 
     private Button addButton;
     private TextField title;
@@ -24,11 +24,11 @@ public class NewAccountPane extends DisplayPane{
     private TextField password;
     private TextField email;
 
-    public NewAccountPane(){
+    public NewAccountPane() {
     }
 
     @Override
-    public Pane createPane(){
+    public Pane createPane() {
         Pane primaryPane = getPrimaryPane();
         createFields(primaryPane);
         return primaryPane;
@@ -36,31 +36,33 @@ public class NewAccountPane extends DisplayPane{
 
     /**
      * create the pane that use to add new account
+     *
      * @param pane root pane.
      */
-    private void createFields(Pane pane){
-        HBox hBox =new HBox();
+    private void createFields(Pane pane) {
+        HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         VBox root = new VBox(5);
         hBox.getChildren().add(root);
-        title = createField("Account Name: ",root);
-        username = createField("Username: ",root);
-        password = createField("Password: ",root,true);
-        email =createField("Email: ",root);
+        title = createField("Account Name: ", root);
+        username = createField("Username: ", root);
+        password = createField("Password: ", root, true);
+        email = createField("Email: ", root);
         addButton = addButton("Confirm", root);
         root.setPadding(new Insets(20));
-        VBox.setMargin(root,new Insets(30,20,20,20));
+        VBox.setMargin(root, new Insets(30, 20, 20, 20));
         pane.getChildren().add(hBox);
     }
 
     /**
      * create fields
-     * @param text label table
-     * @param root parent pane
+     *
+     * @param text             label table
+     * @param root             parent pane
      * @param hideInputContext whether it's a Password Field or TextField.
      * @return created field.
      */
-    private TextField createField(String text, VBox root, boolean hideInputContext){
+    private TextField createField(String text, VBox root, boolean hideInputContext) {
         HBox row = new HBox(10);
         Label label = new Label(text);
         label.setPrefWidth(200);
@@ -68,39 +70,41 @@ public class NewAccountPane extends DisplayPane{
         label.setPadding(new Insets(10));
         label.setTextAlignment(TextAlignment.RIGHT);
 
-        TextField field ;
-        if(!hideInputContext) {
+        TextField field;
+        if (!hideInputContext) {
             field = new TextField();
-        }
-        else{
+        } else {
             field = new PasswordField();
         }
         field.setPrefWidth(300);
         field.setPadding(new Insets(10));
-        HBox.setMargin(field,new Insets(10,0,10,0));
-        row.getChildren().addAll(label,field);
+        HBox.setMargin(field, new Insets(10, 0, 10, 0));
+        row.getChildren().addAll(label, field);
         root.getChildren().add(row);
         return field;
     }
+
     /**
      * create fields
+     *
      * @param text label table
      * @param root parent pane
      * @return created field.
      */
-    private TextField createField(String text, VBox root){
-        return createField(text,root, false);
+    private TextField createField(String text, VBox root) {
+        return createField(text, root, false);
     }
 
     /**
      * add a button
+     *
      * @param text button text
      * @param root parent pane.
      * @return button
      */
-    private Button addButton(String text, VBox root){
+    private Button addButton(String text, VBox root) {
         HBox row = new HBox();
-        HBox.setMargin(row,new Insets(20));
+        HBox.setMargin(row, new Insets(20));
         row.setPadding(new Insets(30));
         row.setPrefWidth(root.getPrefWidth());
         row.setAlignment(Pos.CENTER);
@@ -113,28 +117,35 @@ public class NewAccountPane extends DisplayPane{
 
     /**
      * create a account. values are from pane input fields.
+     *
      * @return created account. if account field is invalid, return null.
      */
     public Account createAccount() {
         Account account = new Account();
         String titleStr = StringProcessUtil.processInputFieldString(this.title.getText());
-        if (titleStr.length() == 0) {return null;}
+        if (titleStr.length() == 0) {
+            return null;
+        }
         account.setTitle(title.getText());
         String usernameStr = StringProcessUtil.processInputFieldString(username.getText());
-        if (usernameStr.length() == 0) {return null;}
+        if (usernameStr.length() == 0) {
+            return null;
+        }
         account.setUsername(usernameStr);
 
         String passwordStr = StringProcessUtil.processInputFieldString(password.getText());
-        if (passwordStr.length() == 0) {return null;}
+        if (passwordStr.length() == 0) {
+            return null;
+        }
         account.setPassword(passwordStr);
 
         String emailStr = StringProcessUtil.processInputFieldString(email.getText());
-        account.setEmail(emailStr.length()==0?null:emailStr);
+        account.setEmail(emailStr.length() == 0 ? null : emailStr);
 
         return account;
     }
 
-    public void setOnButtonClicked(EventHandler<? super MouseEvent> value){
+    public void setOnButtonClicked(EventHandler<? super MouseEvent> value) {
         addButton.setOnMouseClicked(value);
     }
 }

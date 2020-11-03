@@ -25,7 +25,7 @@ public class RegisterUserPane {
     private Button register;
     private Button backToLogin;
 
-    public GridPane getPane(){
+    public GridPane getPane() {
         grid = getRoot();
         createForms(grid);
         return grid;
@@ -33,45 +33,47 @@ public class RegisterUserPane {
 
     /**
      * create a login form
+     *
      * @param grid parent pane.
      */
-    private void createForms(GridPane grid){
+    private void createForms(GridPane grid) {
         Text title = new Text("Sign Up");
-        title.setFont(Font.font("Tahoma", FontWeight.NORMAL,20));
-        grid.add(title,0,0,2,1);
+        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(title, 0, 0, 2, 1);
 
         Label userName = new Label("User Name: ");
-        grid.add(userName,0,1);
+        grid.add(userName, 0, 1);
 
         usernameField = new TextField();
-        grid.add(usernameField,1,1);
+        grid.add(usernameField, 1, 1);
 
         Label pw = new Label("Password: ");
-        grid.add(pw,0,2);
+        grid.add(pw, 0, 2);
 
         passwordField = new PasswordField();
-        grid.add(passwordField, 1,2);
+        grid.add(passwordField, 1, 2);
 
-        Label confirmPw= new Label("Confirm Password: ");
+        Label confirmPw = new Label("Confirm Password: ");
         grid.add(confirmPw, 0, 3);
 
         confirmPasswordField = new PasswordField();
-        grid.add(confirmPasswordField, 1,3);
+        grid.add(confirmPasswordField, 1, 3);
 
         backToLogin = new Button("Back to login");
         register = new Button("Register");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().addAll(backToLogin,register);
+        hbBtn.getChildren().addAll(backToLogin, register);
 
-        grid.add(hbBtn,1,4);
+        grid.add(hbBtn, 1, 4);
     }
 
     /**
      * create the root pane.
+     *
      * @return grid pane.
      */
-    private GridPane getRoot(){
+    private GridPane getRoot() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -79,19 +81,24 @@ public class RegisterUserPane {
         grid.setPadding(new Insets(25));
         return grid;
     }
-    public String getUsername(){
+
+    public String getUsername() {
         return StringProcessUtil.processInputFieldString(usernameField.getText());
     }
-    public String getPassword(){
+
+    public String getPassword() {
         return StringProcessUtil.processInputFieldString(passwordField.getText());
     }
-    public String getConfirmedPassword(){
+
+    public String getConfirmedPassword() {
         return StringProcessUtil.processInputFieldString(confirmPasswordField.getText());
     }
-    public void setActionOnRegisterButton(EventHandler<? super MouseEvent> value){
+
+    public void setActionOnRegisterButton(EventHandler<? super MouseEvent> value) {
         register.setOnMouseClicked(value);
     }
-    public void setActionOnBackToLoginButton(EventHandler<? super MouseEvent> value){
+
+    public void setActionOnBackToLoginButton(EventHandler<? super MouseEvent> value) {
         backToLogin.setOnMouseClicked(value);
     }
 }
